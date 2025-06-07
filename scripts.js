@@ -1,250 +1,232 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Mobile Navigation
+document.addEventListener('DOMContentLoaded', () => {
+
+  /**
+   * ------------------------------------------------------------------
+   * 1. Navigasi Mobile (Hamburger Menu)
+   * ------------------------------------------------------------------
+   */
+  function initMobileNav() {
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
-    
-    hamburger.addEventListener('click', function() {
-        this.classList.toggle('active');
-        navLinks.classList.toggle('active');
+    if (!hamburger || !navLinks) return;
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      navLinks.classList.toggle('active');
     });
-    
-    // Close mobile menu when clicking a link
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            navLinks.classList.remove('active');
-        });
+
+    navLinks.addEventListener('click', (e) => {
+      if (e.target.tagName === 'A') {
+        hamburger.classList.remove('active');
+        navLinks.classList.remove('active');
+      }
     });
-    
-    // Smooth scrolling for anchor links
+  }
+
+  /**
+   * ------------------------------------------------------------------
+   * 2. Smooth Scrolling untuk Anchor Links
+   * ------------------------------------------------------------------
+   */
+  function initSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const targetId = this.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
-            
-            if (targetElement) {
-                window.scrollTo({
-                    top: targetElement.offsetTop - 80,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-    
-    // Animate skills bars on scroll
-    const skills = document.querySelectorAll('.skill');
-    
-    function animateSkills() {
-        skills.forEach(skill => {
-            const percent = skill.getAttribute('data-percent');
-            const progressBar = skill.querySelector('.skill-progress');
-            
-            if (isElementInViewport(skill)) {
-                progressBar.style.width = percent + '%';
-            }
-        });
-    }
-    
-    window.addEventListener('scroll', animateSkills);
-    animateSkills(); // Run once on page load
-    
-    // Project Filter Functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const projectCards = document.querySelectorAll('.project-card');
-
-    filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            // Remove active class from all buttons
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            // Add active class to clicked button
-            button.classList.add('active');
-            
-            const filterValue = button.getAttribute('data-filter');
-            
-            projectCards.forEach(card => {
-                if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        });
-    });
-
-    // Project card hover effect for mobile
-    projectCards.forEach(card => {
-        card.addEventListener('touchstart', function() {
-            this.classList.add('hover');
-        });
-        
-        document.addEventListener('touchstart', function(e) {
-            if (!card.contains(e.target)) {
-                card.classList.remove('hover');
-            }
-        });
-    });
-});
-
-    // Animate stats counters
-    const counters = document.querySelectorAll('.number');
-    const speed = 200;
-    
-    function animateCounters() {
-        counters.forEach(counter => {
-            const target = +counter.getAttribute('data-count');
-            const count = +counter.innerText;
-            const increment = target / speed;
-            
-            if (count < target && isElementInViewport(counter)) {
-                counter.innerText = Math.ceil(count + increment);
-                setTimeout(animateCounters, 1);
-            } else {
-                counter.innerText = target;
-            }
-        });
-    }
-    
-    window.addEventListener('scroll', function() {
-        if (isAnyElementInViewport(counters)) {
-            animateCounters();
-        }
-    });
-    
-    // Check if element is in viewport
-    function isElementInViewport(el) {
-        const rect = el.getBoundingClientRect();
-        return (
-            rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.bottom >= 0
-        );
-    }
-    
-    function isAnyElementInViewport(elements) {
-        for (let el of elements) {
-            if (isElementInViewport(el)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    // Custom cursor
-    const cursor = document.querySelector('.cursor');
-    
-    document.addEventListener('mousemove', (e) => {
-        cursor.style.left = e.pageX + 'px';
-        cursor.style.top = e.pageY + 'px';
-    });
-    
-    // Cursor hover effects
-    document.querySelectorAll('a, button, .project-card').forEach(el => {
-        el.addEventListener('mouseenter', () => {
-            cursor.classList.add('cursor-hover');
-        });
-        
-        el.addEventListener('mouseleave', () => {
-            cursor.classList.remove('cursor-hover');
-        });
-    });
-    
-    // Header scroll effect
-    const header = document.querySelector('header');
-    
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            header.style.backgroundColor = 'rgba(22, 22, 22, 0.95)';
-            header.style.backdropFilter = 'blur(10px)';
-            header.style.padding = '10px 0';
-        } else {
-            header.style.backgroundColor = 'transparent';
-            header.style.backdropFilter = 'none';
-            header.style.padding = '20px 0';
-        }
-    });
-    
-    // Form submission
-    const contactForm = document.querySelector('.contact-form');
-    
-    contactForm.addEventListener('submit', function(e) {
+      anchor.addEventListener('click', function (e) {
         e.preventDefault();
-        
-        // Simple form validation
-        const inputs = this.querySelectorAll('input, textarea');
-        let isValid = true;
-        
-        inputs.forEach(input => {
-            if (input.hasAttribute('required') && !input.value.trim()) {
-                input.style.borderColor = 'red';
-                isValid = false;
-            } else {
-                input.style.borderColor = '';
-            }
-        });
-        
-        if (isValid) {
-            // Here you would typically send the form data to a server
-            alert('Thank you for your message! I will get back to you soon.');
-            this.reset();
-        } else {
-            alert('Please fill in all required fields.');
-        }
-    });
-    
-    // Blob interaction
-    const blobs = document.querySelectorAll('.blob');
-    
-    document.addEventListener('mousemove', (e) => {
-        const x = e.clientX / window.innerWidth;
-        const y = e.clientY / window.innerHeight;
-        
-        blobs.forEach((blob, index) => {
-            // Each blob moves slightly differently
-            const speed = 0.02 * (index + 1);
-            blob.style.transform = `translate(${x * 50 * speed}px, ${y * 50 * speed}px)`;
-        });
-    });
-    
-    // Initialize animations
-    AOS.init({
-        duration: 800,
-        easing: 'ease-in-out',
-        once: true
-    });
-});
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
 
-// Simple AOS (Animate On Scroll) implementation
-const AOS = {
-    init(options) {
-        this.options = options || {};
-        this.elements = document.querySelectorAll('[data-aos]');
-        this.observer = new IntersectionObserver(this.handleIntersect.bind(this), {
-            threshold: 0.1
-        });
+        if (targetElement) {
+          const offsetTop = targetElement.offsetTop - 80; // Header offset
+          window.scrollTo({
+            top: offsetTop,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  }
+
+  /**
+   * ------------------------------------------------------------------
+   * 3. Animasi Saat Elemen Terlihat (Skills & Counters)
+   * ------------------------------------------------------------------
+   */
+  function initAnimationsOnScroll() {
+    const animatedElements = document.querySelectorAll('.skill, .number');
+    if (animatedElements.length === 0) return;
+
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+
+          // Animate skill bars
+          if (el.classList.contains('skill')) {
+            const percent = el.dataset.percent;
+            const progressBar = el.querySelector('.skill-progress');
+            if (progressBar) progressBar.style.width = percent + '%';
+          }
+
+          // Animate number counters
+          if (el.classList.contains('number')) {
+            animateCounter(el);
+          }
+
+          observer.unobserve(el); // Hentikan observasi setelah animasi
+        }
+      });
+    }, {
+      threshold: 0.1
+    }); // Memicu saat 10% elemen terlihat
+
+    animatedElements.forEach(el => observer.observe(el));
+  }
+
+  function animateCounter(element) {
+    const target = +element.dataset.count;
+    if (isNaN(target)) return;
+    element.innerText = '0';
+    const duration = 1500;
+    const stepTime = Math.max(1, Math.floor(duration / target));
+
+    let current = 0;
+    const timer = setInterval(() => {
+      current += 1;
+      element.innerText = current;
+      if (current >= target) {
+        element.innerText = target; // Pastikan angka akhir tepat
+        clearInterval(timer);
+      }
+    }, stepTime);
+  }
+
+  /**
+   * ------------------------------------------------------------------
+   * 4. Efek Kursor Kustom
+   * ------------------------------------------------------------------
+   */
+  function initCursor() {
+    const cursor = document.querySelector('.cursor');
+    if (!cursor) return;
+
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.transform = `translate(${e.pageX}px, ${e.pageY}px)`;
+    });
+
+    const hoverTargets = document.querySelectorAll('a, button, .project-card');
+    hoverTargets.forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
+    });
+  }
+
+  /**
+   * ------------------------------------------------------------------
+   * 5. Efek Header Saat Scroll
+   * ------------------------------------------------------------------
+   */
+  function initHeaderEffect() {
+    const header = document.querySelector('header');
+    if (!header) return;
+
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 50);
+    });
+  }
+
+  /**
+   * ------------------------------------------------------------------
+   * 6. Interaksi Latar Belakang Blob
+   * ------------------------------------------------------------------
+   */
+  function initBlobInteraction() {
+    const blobs = document.querySelectorAll('.blob');
+    if (blobs.length === 0) return;
+
+    document.addEventListener('mousemove', (e) => {
+      const {
+        clientX,
+        clientY
+      } = e;
+      const x = clientX / window.innerWidth;
+      const y = clientY / window.innerHeight;
+
+      blobs.forEach((blob, index) => {
+        const speed = 0.02 * (index + 1);
+        blob.style.transform = `translate(${x * 50 * speed}px, ${y * 50 * speed}px)`;
+      });
+    });
+  }
+  
+  /**
+   * ------------------------------------------------------------------
+   * 7. Modal Detail Proyek
+   * ------------------------------------------------------------------
+   */
+  function initProjectModal() {
+    const scroller = document.querySelector('.projects-grid-scroller');
+    const modal = document.getElementById('project-modal');
+    if (!scroller || !modal) return;
+
+    const modalImg = document.getElementById('modal-img');
+    const modalTitle = document.getElementById('modal-title');
+    const modalTags = document.getElementById('modal-tags');
+    const modalDescription = document.getElementById('modal-description');
+    const modalRepoLink = document.getElementById('modal-repo-link');
+    const closeModalBtn = document.querySelector('.modal-close-btn');
+
+    scroller.addEventListener('click', (e) => {
+      const card = e.target.closest('.project-card');
+      if (card) {
+        modalImg.src = card.dataset.imgSrc;
+        modalTitle.textContent = card.dataset.title;
+        modalDescription.textContent = card.dataset.description;
+        modalRepoLink.href = card.dataset.linkRepo;
+
+        modalTags.innerHTML = '';
+        if (card.dataset.tags) {
+            card.dataset.tags.split(',').forEach(tag => {
+            const tagElement = document.createElement('span');
+            tagElement.textContent = tag.trim();
+            modalTags.appendChild(tagElement);
+          });
+        }
         
-        this.elements.forEach(el => this.observer.observe(el));
-    },
-    
-    handleIntersect(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                this.animate(entry.target);
-                if (this.options.once) {
-                    this.observer.unobserve(entry.target);
-                }
-            }
-        });
-    },
-    
-    animate(el) {
-        const animation = el.getAttribute('data-aos');
-        const duration = this.options.duration || 800;
-        const easing = this.options.easing || 'ease';
-        
-        el.style.transition = `all ${duration}ms ${easing}`;
-        el.style.opacity = '1';
-        el.style.transform = 'translateY(0)';
+        modal.classList.add('active');
+      }
+    });
+
+    function closeModal() {
+      modal.classList.remove('active');
     }
-};
+
+    closeModalBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === "Escape" && modal.classList.contains('active')) closeModal();
+    });
+  }
+
+
+  /**
+   * ------------------------------------------------------------------
+   * FUNGSI INISIALISASI UTAMA
+   * Semua fungsionalitas diaktifkan dari sini.
+   * ------------------------------------------------------------------
+   */
+  function init() {
+    initMobileNav();
+    initSmoothScroll();
+    initAnimationsOnScroll();
+    initCursor();
+    initHeaderEffect();
+    initBlobInteraction();
+    initProjectModal();
+  }
+
+  // Menjalankan semua skrip
+  init();
+
+});
