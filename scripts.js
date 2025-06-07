@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }, {
       threshold: 0.1
-    }); // Memicu saat 10% elemen terlihat
+    });
 
     animatedElements.forEach(el => observer.observe(el));
   }
@@ -85,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function animateCounter(element) {
     const target = +element.dataset.count;
     if (isNaN(target)) return;
+    
     element.innerText = '0';
     const duration = 1500;
     const stepTime = Math.max(1, Math.floor(duration / target));
@@ -94,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
       current += 1;
       element.innerText = current;
       if (current >= target) {
-        element.innerText = target; // Pastikan angka akhir tepat
+        element.innerText = target;
         clearInterval(timer);
       }
     }, stepTime);
@@ -113,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
       cursor.style.transform = `translate(${e.pageX}px, ${e.pageY}px)`;
     });
 
-    const hoverTargets = document.querySelectorAll('a, button, .project-card');
+    const hoverTargets = document.querySelectorAll('a, button, .project-card, .hamburger');
     hoverTargets.forEach(el => {
       el.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
@@ -144,10 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (blobs.length === 0) return;
 
     document.addEventListener('mousemove', (e) => {
-      const {
-        clientX,
-        clientY
-      } = e;
+      const { clientX, clientY } = e;
       const x = clientX / window.innerWidth;
       const y = clientY / window.innerHeight;
 
