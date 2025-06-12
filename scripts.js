@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!floatingNav) return;
 
         window.addEventListener('scroll', () => {
+            // Cek apakah elemen navbar-wrapper ada
             const navWrapper = floatingNav.querySelector('.navbar-wrapper');
             if (navWrapper) {
                 if (window.scrollY > 30) {
@@ -78,7 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Fungsi Inisialisasi Utama ---
-    // Fungsi ini akan memanggil semua fungsi lain secara berurutan.
     function init() {
         initHeaderScrollEffect();
         initActiveNavOnScroll();
@@ -88,5 +88,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Jalankan semuanya setelah halaman siap
     init();
-
 });

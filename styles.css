@@ -111,12 +111,75 @@ section { padding: 60px 20px; max-width: 1200px; margin: 0 auto; }
 .tech-icon:hover i { transform: scale(1.1); }
 
 /* Projects Section */
-.projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
-.project-card { border-radius: 12px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; }
-.project-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08); }
-.project-card img { width: 100%; height: 250px; object-fit: cover; }
-.project-info { padding: 15px; }
-.project-info h3 { margin-bottom: 2px; }
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Membuat 2 kolom */
+  gap: 2.5rem; /* Jarak antar kartu */
+  margin-top: 3rem;
+}
+
+.project-card {
+  background-color: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  overflow: hidden; /* Penting untuk menjaga gambar tetap di dalam sudut */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative; /* Diperlukan untuk positioning ikon link */
+}
+
+.project-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+}
+
+.project-card img {
+  width: 100%;
+  aspect-ratio: 16 / 9; /* Ukuran gambar 16:9 */
+  object-fit: cover; /* Memastikan gambar terisi penuh tanpa distorsi */
+}
+
+.project-info {
+  padding: 24px;
+}
+
+.project-info h3 {
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.project-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.project-link {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-radius: 50%;
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  text-decoration: none;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.project-link:hover {
+  transform: scale(1.1);
+  background-color: #ffffff;
+}
+
+
 
 /* Contact Section */
 .contact { text-align: center; }
@@ -148,4 +211,10 @@ footer { text-align: center; padding: 30px 20px; border-top: 1px solid var(--bor
   .nav-links { display: none; }
   .hamburger { display: block; }
   .hero-title { font-size: 2.5rem; }
+}
+/* Penyesuaian untuk layar kecil (mobile) */
+@media (max-width: 768px) {
+  .projects-grid {
+    grid-template-columns: 1fr; /* Kembali menjadi 1 kolom di mobile */
+  }
 }
